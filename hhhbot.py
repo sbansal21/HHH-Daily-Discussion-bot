@@ -35,7 +35,7 @@ posts = 100
 post = "Daily Discussion Thread"
 comment = "yeezy yeezy what's good"
 found = False
-for submission in subreddit.hot(limit = posts):
+for submission in subreddit.new(limit = posts):
     if submission.id not in visited:
         if re.search(post, submission.title, re.IGNORECASE):
             submission.reply(comment)
