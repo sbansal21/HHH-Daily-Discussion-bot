@@ -1,6 +1,13 @@
 # HHH-Daily-Discussion-bot
 A Reddit bot that automatically posts submissions to /r/hiphopheads Daily Discussion threads.
 
+# Installing python3 and modules
+```
+~$ sudo apt-get install python3
+~$ sudo apt-get install python3-pip
+~$ sudo pip3 install praw
+```
+
 # Using the bot on *nix systems
 1. Add "hhhbot.py" to some directory.
 2. Give "hhhbot.py" permission to execute:  

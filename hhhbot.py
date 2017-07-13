@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 import bot  # contains private bot info
 
@@ -34,6 +34,7 @@ failure = "specified thread not found."
 posts = 100
 post = "Daily Discussion Thread"
 comment = "yeezy yeezy what's good"
+
 found = False
 for submission in subreddit.new(limit = posts):
     if submission.id not in visited:
