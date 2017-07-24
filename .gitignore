@@ -15,5 +15,6 @@ Thumbs.db
 # PyCharm files
 .idea/
 
-bot.py
+settings.py
 visited.txt
+log
