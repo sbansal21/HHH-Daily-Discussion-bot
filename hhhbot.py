@@ -45,8 +45,11 @@ for submission in subreddit.new(limit = 100):
 		if re.search(trigger, submission.title, re.IGNORECASE):
 			submission.reply(comment)
 			found = True
-			print(timestamp + failure)
+			print(timestamp + success + submission.id)
 			visited.append(submission.id)
+
+if not found:
+	print(timestamp + failure)
 
 # logs triggered submissions as visited
 with open("visited.txt", "w") as file:

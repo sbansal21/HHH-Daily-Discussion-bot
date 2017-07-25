@@ -44,10 +44,10 @@ found = False
 for submission in subreddit.new(limit = posts):
 	if submission.id not in visited:
 		if re.search(trigger, submission.title, re.IGNORECASE):
-		submission.reply(comment)
-		found = True
-		print(timestamp + success + submission.id)
-		visited.append(submission.id)
+			submission.reply(comment)
+			found = True
+			print(timestamp + success + submission.id)
+			visited.append(submission.id)
 
 if not found:
 	print(timestamp + failure)
