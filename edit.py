@@ -4,6 +4,21 @@ import os
 import getpass
 import sys
 
+cmds = ("\nPOSSIBLE COMMANDS:\n"
+	"'account'\n"
+	"\tedits the account the bot runs on (i.e. username-password combo)\n"
+	"\tUsage: ./edit.py account\n"
+	"'subreddit'\n"
+	"\tedits the subreddit the bot tracks and runs within\n"
+	"\tUsage: ./edit.py subreddit\n"
+	"'trigger'\n"
+	"\tedits the keyword or phrase that triggers the bot\n"
+	"\t(can be left blank to comment under every post in the subreddit)\n"
+	"\tUsage: ./edit.py trigger\n"
+	"'comment'\n"
+	"\tedits the comment the bot posts when triggered by a thread\n"
+	"\tUsage: ./edit.py comment\n")
+
 # first time setup
 if not os.path.isfile("settings.py"):
 	with open("settings.py", "w") as file:
@@ -38,6 +53,9 @@ def trigger():
 	data[5] = property("trigger", input("trigger? "))
 	return data[5]
 
+def help():
+	print(cmds)
+
 # edits comment preference
 def comment():
 	data[6] = "comment = \"" + input("comment? ") + "\"\n"
@@ -66,3 +84,5 @@ if len(sys.argv) > 1:
 			opts[arg]()
 		with open("settings.py", "w") as file:
 			file.writelines(data)
+else:
+	help()
