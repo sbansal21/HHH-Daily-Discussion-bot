@@ -7,10 +7,10 @@ import re
 import os
 
 import runpy
-import edit
 
 # ensures settings properly initialized
-runpy.run_path("edit.py")
+if not os.path.isfile("settings.py"):
+	runpy.run_path("edit.py")
 
 import settings
 

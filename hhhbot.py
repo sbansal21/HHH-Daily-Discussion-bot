@@ -7,10 +7,10 @@ import re
 import os
 
 import runpy
-import edit
 
 # ensures settings properly initialized
-runpy.run_path("edit.py")
+if not os.path.isfile("settings.py"):
+	runpy.run_path("edit.py")
 
 import settings
 
@@ -37,7 +37,7 @@ success = "bot successfully commented in thread "
 failure = "specified thread not found."
 
 # iterates through 100 newest posts in subreddit
-trigger = "Daily Discussion Thread"
+trigger = "Daily Discussion"
 comment = "yeezy yeezy what's good"
 found = False
 for submission in subreddit.new(limit = 100):
