@@ -19,6 +19,8 @@ cmds = ("\nPOSSIBLE COMMANDS:\n"
 	"\tedits the comment the bot posts when triggered by a thread\n"
 	"\tUsage: ./edit.py comment\n")
 
+setup = False
+
 # first time setup
 if not os.path.isfile("settings.py"):
 	with open("settings.py", "w") as file:
@@ -30,6 +32,7 @@ if not os.path.isfile("settings.py"):
 		file.write("subreddit = '" + input("subreddit: ") + "'\n")
 		file.write("trigger = '" + input("trigger: ") + "'\n")
 		file.write("comment = \"" + input("comment: ") + "\"\n")
+		setup = True
 
 import settings
 
@@ -85,4 +88,5 @@ if len(sys.argv) > 1:
 		with open("settings.py", "w") as file:
 			file.writelines(data)
 else:
-	help()
+	if not setup:
+		help()
