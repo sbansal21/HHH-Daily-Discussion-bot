@@ -22,6 +22,7 @@ A Reddit bot that automatically posts submissions to /r/hiphopheads Daily and Su
 &emsp;`~$ crontab -e`  
 &emsp;Within the crontab file, add `* * * * * cd <directory of bot files>; ./rbot.py`.   
 4. (Optional) To have the cron job provide updates on the terminal:  
+        &emsp;Run `autocron.sh` as a normal Shell script, OR  
         &emsp;Determine the pts file of the running terminal through the `tty` command.         
         &emsp;&emsp;`~$ tty`        
         &emsp;&emsp;`/dev/pts/0` or some variant        
@@ -40,6 +41,5 @@ A Reddit bot that automatically posts submissions to /r/hiphopheads Daily and Su
 &emsp;`comment = <your comment under the appropriate post>`  
 
 ## TODO
-- crontab script
 - follower
 - archive diver
