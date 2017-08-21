@@ -5,30 +5,34 @@ import datetime
 import praw
 import re
 import os
+import sys
 
-import runpy
+sys.stdout = open(os.devnull, 'w')
+from edit import setup, prefs
+sys.stdout = sys.__stdout__
+
+from collections import OrderedDict
 
 # ensures settings properly initialized
-if not os.path.isfile("settings.py"):
-	runpy.run_path("edit.py")
+if not os.path.isfile("settings"):
+	edit.setup()
 
-import settings
+map = prefs()
 
 # tracks which posts have already been visited
 if not os.path.isfile("visited.txt"):
-    visited = []
+	visited = []
 else:
-    with open("visited.txt", "r") as file:
-        visited = file.read().split("\n")
-        visited = list(filter(None, visited))
+	with open("visited.txt", "r") as file:
+		visited = file.read().split("\n")
+		visited = list(filter(None, visited))
 
 # creates PRAW Reddit instance
 bot = praw.Reddit(user_agent = 'HHH PyBot',
-                  client_id = settings.client_id,
-                  client_secret = settings.client_secret,
-                  username = settings.username,
-                  password = settings.password)
-
+                  client_id = map['client_id'],
+                  client_secret = map['client_secret'],
+                  username = map['username'],
+                  password = map['password'])
 # points bot to a specific subreddit
 subreddit = bot.subreddit('hiphopheads')
 

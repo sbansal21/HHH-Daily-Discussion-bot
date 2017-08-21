@@ -4,6 +4,8 @@ import os
 import getpass
 import sys
 
+from collections import OrderedDict
+
 cmds = ("\nPOSSIBLE COMMANDS:\n"
 	"'account'\n"
 	"\tedits the account the bot runs on (i.e. username-password combo)\n"
@@ -18,75 +20,83 @@ cmds = ("\nPOSSIBLE COMMANDS:\n"
 	"'comment'\n"
 	"\tedits the comment the bot posts when triggered by a thread\n"
 	"\tUsage: ./edit.py comment\n")
-
-setup = False
+usage = "[USAGE] Only valid args are 'setup', 'account', 'subreddit', 'trigger', and 'comment'"
+set = False
+map=OrderedDict()
 
 # first time setup
-if not os.path.isfile("settings.py"):
-	with open("settings.py", "w") as file:
-		print("first time setup")
-		file.write("client_id = '" + input("client_id: ") + "'\n")
-		file.write("client_secret = '" + input("client_secret: ") + "'\n")
-		file.write("username = '" + input("username: ") + "'\n")
-		file.write("password = '" + getpass.getpass("password: ") + "'\n")
-		file.write("subreddit = '" + input("subreddit: ") + "'\n")
-		file.write("trigger = '" + input("trigger: ") + "'\n")
-		file.write("comment = \"" + input("comment: ") + "\"\n")
-		setup = True
-
-import settings
-
-with open("settings.py", "r") as file:
-	data = file.readlines()
+def setup():
+	print("first time setup")
+	with open("settings", "w") as file:
+		file.write("client_id='" + input("client_id: ") + "'\n")
+		file.write("client_secret='" + input("client_secret: ") + "'\n")
+		file.write("username='" + input("username: ") + "'\n")
+		file.write("password='" + getpass.getpass("password: ") + "'\n")
+		file.write("subreddit='" + input("subreddit: ") + "'\n")
+		file.write("trigger='" + input("trigger: ") + "'\n")
+		file.write("comment='" + input("comment: ") + "'\n")
+		set = True
 
 # edits account settings
 def account():
-	data[2] = property("username", input("username? "))
-	data[3] = property("password", getpass.getpass("password? "))
-	return "".join((data[2], data[3]))
+	map['username'] = input("username? ")
+	map['password'] = getpass.getpass("password? ")
+	return ":".join((map['username'], map['password']))
 
 # edits subreddit preference
 def subreddit():
-	data[4] = property("subreddit", input("subreddit? "))
-	print(data[4])
-	return data[4]
+	map['subreddit'] = input("subreddit? ")
+	return map['subreddit']
 
 # edits trigger preference
 def trigger():
-	data[5] = property("trigger", input("trigger? "))
-	return data[5]
+	map['trigger']=input("trigger? ")
+	return map['trigger']
+
+# edits comment preference
+def comment():
+	map['comment'] = input("comment? ")
+	return map['comment']
 
 def help():
 	print(cmds)
 
-# edits comment preference
-def comment():
-	data[6] = "comment = \"" + input("comment? ") + "\"\n"
-	return data[6]
+if not os.path.isfile("settings"):
+	setup()
 
-# internal def
-def property(key, value):
-	return str(key + " = '" + value + "'\n")
+with open("settings", "r") as file:
+	data = file.readlines()
+
+def prefs():
+	for entry in data:
+		key = entry[0:entry.index("=")]
+		val = entry[entry.index("=")+2:entry.index("\n")-1]
+		map[key]=val
+	return map
 
 opts = {
 	"account" : account,
 	"subreddit" : subreddit,
 	"trigger" : trigger,
-	"comment" : comment
+	"comment" : comment,
+	"setup"	: setup
 }
+
+prefs()
 
 # runs appropriate defs if all args valid, else usage error
 if len(sys.argv) > 1:
 	invalid = False
 	for arg in sys.argv[1:]:
 		if arg not in opts:
-			print("usage error: only valid args are 'account', 'subreddit', 'trigger', and 'comment'")
+			print(usage)
 			invalid = True
 	if not invalid:
 		for arg in sys.argv[1:]:
 			opts[arg]()
-		with open("settings.py", "w") as file:
-			file.writelines(data)
+		with open("settings", "w") as file:
+			for entry in map:
+				file.write(entry + "='" + map[entry] + "'\n")
 else:
-	if not setup:
+	if not set:
 		help()

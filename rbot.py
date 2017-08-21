@@ -5,14 +5,19 @@ import datetime
 import praw
 import re
 import os
+import sys
 
-import runpy
+sys.stdout = open(os.devnull, 'w')
+from edit import setup, prefs
+sys.stdout = sys.__stdout__
+
+from collections import OrderedDict
 
 # ensures settings properly initialized
-if not os.path.isfile("settings.py"):
-	runpy.run_path("edit.py")
+if not os.path.isfile("settings"):
+	edit.setup()
 
-import settings
+map = prefs()
 
 # tracks which posts have already been visited
 if not os.path.isfile("visited.txt"):
@@ -24,13 +29,13 @@ else:
 
 # creates PRAW Reddit instance
 bot = praw.Reddit(user_agent = 'redditBot',
-                  client_id = settings.client_id,
-                  client_secret = settings.client_secret,
-                  username = settings.username,
-                  password = settings.password)
+                  client_id = map['client_id'],
+                  client_secret = map['client_secret'],
+                  username = map['username'],
+                  password = map['password'])
 
 # points bot to a specific subreddit
-subreddit = bot.subreddit(settings.subreddit)
+subreddit = bot.subreddit(map['subreddit'])
 
 timestamp = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S') + "\t\t"
 success = "bot successfully commented in thread "
@@ -38,8 +43,8 @@ failure = "specified thread not found."
 
 # iterates through 100 newest posts in subreddit
 posts = 100
-trigger = settings.trigger
-comment = settings.comment
+trigger = map['trigger']
+comment = map['comment']
 found = False
 for submission in subreddit.new(limit = posts):
 	if submission.id not in visited:
