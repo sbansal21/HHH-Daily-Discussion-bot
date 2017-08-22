@@ -26,16 +26,15 @@ map=OrderedDict()
 
 # first time setup
 def setup():
-	print("first time setup")
-	with open("settings", "w") as file:
-		file.write("client_id='" + input("client_id: ") + "'\n")
-		file.write("client_secret='" + input("client_secret: ") + "'\n")
-		file.write("username='" + input("username: ") + "'\n")
-		file.write("password='" + getpass.getpass("password: ") + "'\n")
-		file.write("subreddit='" + input("subreddit: ") + "'\n")
-		file.write("trigger='" + input("trigger: ") + "'\n")
-		file.write("comment='" + input("comment: ") + "'\n")
-		set = True
+	print("clean setup")
+	map['client_id'] = input("client_id: ")
+	map['client_secret'] = input("client_id: ")
+	map['username'] = input("username: ")
+	map['password'] = getpass.getpass("password: ")
+	map['subreddit'] = input("subreddit: ")
+	map['trigger'] = input("trigger: ")
+	map['comment'] = input("comment: ")
+	set = True
 
 # edits account settings
 def account():
@@ -58,21 +57,31 @@ def comment():
 	map['comment'] = input("comment? ")
 	return map['comment']
 
+# prints help page
 def help():
 	print(cmds)
 
-if not os.path.isfile("settings"):
-	setup()
+# writes file with internal OrderedDict
+def write():
+	with open("settings", "w") as file:
+		for entry in map:
+			file.write(entry + "='" + map[entry] + "'\n")
 
-with open("settings", "r") as file:
-	data = file.readlines()
-
+# generates map from settings file
 def prefs():
 	for entry in data:
 		key = entry[0:entry.index("=")]
 		val = entry[entry.index("=")+2:entry.index("\n")-1]
 		map[key]=val
 	return map
+
+# main script
+if not os.path.isfile("settings"):
+	setup()
+	write()
+
+with open("settings", "r") as file:
+	data = file.readlines()
 
 opts = {
 	"account" : account,
@@ -94,9 +103,7 @@ if len(sys.argv) > 1:
 	if not invalid:
 		for arg in sys.argv[1:]:
 			opts[arg]()
-		with open("settings", "w") as file:
-			for entry in map:
-				file.write(entry + "='" + map[entry] + "'\n")
+		write()
 else:
 	if not set:
 		help()
