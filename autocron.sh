@@ -28,7 +28,7 @@ do
 	fi
 
 	if [ "$log" = true ] && [ "$out" = true ]; then
-		echo "* * * * * cd `pwd`; ./${1}.py >> ${1}.log; tail -n1 log > `tty`" >> autocron
+		echo "* * * * * cd `pwd`; ./${1}.py >> ${1}.log; tail -n1 ${1}.log > `tty`" >> autocron
 	elif [ "$log" = true ] && [ "$out" = false ]; then
 		echo "* * * * * cd `pwd`; ./${1}.py >> ${1}.log" >> autocron
 	elif [ "$log" = false ] && [ "$out" = true ]; then
