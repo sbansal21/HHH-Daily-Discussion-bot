@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 
 import os
+import praw
+import prawcore
 from getpass import getpass
 import sys
 import configparser
@@ -33,6 +35,7 @@ def setupClient():
 	config.set('client', 'secret', input("secret? "))
 	config.set('client', 'username', input("username? "))
 	config.set('client', 'password', getpass("password? "))
+	verifyClient()
 	savePrefs()
 
 # sets up the necessary options for the 'commenter' module
@@ -44,6 +47,22 @@ def setupCommenter():
 	config.set('commenter', 'comment', input("comment? "))
 	savePrefs()
 
+# verifies the client credentials and resets the client if necessary
+def verifyClient():
+	bot = praw.Reddit(user_agent = 'pingbot',
+	                  client_id = config.get('client', 'client_id'),
+	                  client_secret = config.get('client', 'secret'),
+	                  username = config.get('client', 'username'),
+	                  password = config.get('client', 'password'))
+	try:
+		for submission in bot.subreddit('redditdev').new(limit = 1):
+			pass
+	except prawcore.exceptions.ResponseException:
+		print("[ERROR] invalid client configuration")
+		config.remove_section('client')
+		setupClient()
+
+# ensures that the commenter settings are set up
 def verifyCommenter():
 	if not config.has_section('commenter'):
 		setupCommenter()
@@ -84,6 +103,7 @@ def main():
 
 	if not os.path.isfile(settings):
 		setupClient()
+		verifyClient()
 		savePrefs()
 		if len(sys.argv) <= 1:
 			return
