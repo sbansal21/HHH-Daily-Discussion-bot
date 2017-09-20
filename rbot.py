@@ -6,7 +6,7 @@ import praw
 import re
 import os
 import sys
-from edit import settings, setupClient, loadPrefs, verifyCommenter
+from editor import settings, setupClient, loadPrefs, verifyCommenter
 import configparser
 
 # ensures settings properly initialized

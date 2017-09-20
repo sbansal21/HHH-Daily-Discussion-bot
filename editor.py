@@ -10,17 +10,17 @@ import configparser
 help = ("\nPOSSIBLE COMMANDS:",
 	"'account'",
 	"\tedits the account the bot runs on (i.e. username-password combo)",
-	"\tUsage: ./edit.py account",
+	"\tUsage: python3 editor.py account",
 	"'subreddit'",
 	"\tedits the subreddit the bot tracks and runs within",
-	"\tUsage: ./edit.py subreddit",
+	"\tUsage: python3 editor.py subreddit",
 	"'trigger'",
 	"\tedits the keyword or phrase that triggers the bot",
 	"\t(can be left blank to comment under every post in the subreddit)",
-	"\tUsage: ./edit.py trigger",
+	"\tUsage: python3 editor.py trigger",
 	"'comment'",
 	"\tedits the comment the bot posts when triggered by a thread",
-	"\tUsage: ./edit.py comment",)
+	"\tUsage: python3 editor.py comment\n")
 help = "\n".join(help)
 usage = "[USAGE] Only valid args are 'setup', 'account', 'subreddit', 'trigger', and 'comment'"
 settings = 'settings.ini'
