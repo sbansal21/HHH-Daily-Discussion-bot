@@ -6,18 +6,14 @@ import praw
 import re
 import os
 import sys
-
-sys.stdout = open(os.devnull, 'w')
-from edit import setup, prefs
-sys.stdout = sys.__stdout__
-
-from collections import OrderedDict
+from edit import settings, setupClient, loadPrefs, verifyCommenter
+import configparser
 
 # ensures settings properly initialized
-if not os.path.isfile("settings"):
-	edit.setup()
+if not os.path.isfile(settings):
+	setupClient()
 
-map = prefs()
+config = loadPrefs()
 
 # tracks which posts have already been visited
 if not os.path.isfile("visited.txt"):
@@ -29,13 +25,16 @@ else:
 
 # creates PRAW Reddit instance
 bot = praw.Reddit(user_agent = 'redditBot',
-                  client_id = map['client_id'],
-                  client_secret = map['client_secret'],
-                  username = map['username'],
-                  password = map['password'])
+                  client_id = config.get('client', 'client_id'),
+                  client_secret = config.get('client', 'secret'),
+                  username = config.get('client', 'username'),
+                  password = config.get('client', 'password'))
+
+verifyCommenter()
+config = loadPrefs()
 
 # points bot to a specific subreddit
-subreddit = bot.subreddit(map['subreddit'])
+subreddit = bot.subreddit(config.get('commenter', 'subreddit'))
 
 timestamp = datetime.datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S') + "\t\t"
 success = "bot successfully commented in thread "
@@ -43,8 +42,8 @@ failure = "specified thread not found."
 
 # iterates through 100 newest posts in subreddit
 posts = 100
-trigger = map['trigger']
-comment = map['comment']
+trigger = config.get('commenter', 'trigger')
+comment = config.get('commenter', 'comment')
 found = False
 for submission in subreddit.new(limit = posts):
 	if submission.id not in visited:
