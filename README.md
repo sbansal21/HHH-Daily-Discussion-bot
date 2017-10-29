@@ -15,7 +15,7 @@ A repo-specific editor to manage bot settings.
 ~$ sudo apt-get install python3
 ~$ sudo apt-get install python3-setuptools
 ~$ sudo easy_install3 pip
-~$ sudo pip3 install praw
+~$ sudo pip3 install -r requirements.txt
 ```
 
 ## Using the bot on \*nix systems
